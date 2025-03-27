@@ -1,0 +1,167 @@
+/* src/WordScramble.css */
+body {
+    margin: 0;
+    font-family: -WordScramblele-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f4f7f6;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align top */
+    min-height: 100vh;
+    padding-top: 20px; /* Add some space at the top */
+}
+
+.WordScramble {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 70px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    width: 1000px;
+    display: flex;
+    flex-direction: column;
+    min-height: 700px; /* Give it some minimum height */
+}
+
+.WordScramble-header {
+    background-color: #0d1d2f; /* A nice blue */
+    padding: 15px;
+    color: white;
+    border-radius: 8px 8px 0 0; /* Rounded top corners */
+    margin: -20px -30px 20px -30px; /* Extend to edges */
+}
+
+.WordScramble-header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.game-container {
+    margin-top: 20px;
+    flex-grow: 1; /* Allow main content to grow */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hint-section {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 25px;
+    background-color: #eef;
+    padding: 10px 15px;
+    border-radius: 4px;
+    border-left: 4px solid #4a90e2;
+}
+
+.scrambled-word {
+    font-size: 2.5em;
+    letter-spacing: 5px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #d9534f; /* A reddish color */
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    min-width: 200px; /* Ensure it has some width */
+    display: inline-block;
+}
+
+.guess-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 350px; /* Limit form width */
+}
+
+.guess-form input[type="text"] {
+    padding: 12px 15px;
+    font-size: 1em;
+    border: 2px solid #ccc;
+    border-radius: 4px 0 0 4px; /* Round left corners */
+    flex-grow: 1; /* Take available space */
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.guess-form input[type="text"]:focus {
+    border-color: #4a90e2;
+}
+
+.guess-form input[type="text"]:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+
+.guess-form button {
+    padding: 14px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #5cb85c; /* Green */
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0; /* Round right corners */
+    transition: background-color 0.2s ease-in-out;
+    white-space: nowrap; /* Prevent text wrWordScrambleing */
+}
+
+.guess-form button:hover:not(:disabled) {
+    background-color: #4cae4c;
+}
+
+.guess-form button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+
+.feedback {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 10px;
+    min-height: 20px; /* Reserve space */
+}
+
+.feedback.correct {
+    color: #5cb85c; /* Green */
+}
+
+.feedback.incorrect {
+    color: #d9534f; /* Red */
+}
+
+.next-button {
+    margin-top: 20px;
+    padding: 10px 25px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #f0ad4e; /* Orange */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.next-button:hover {
+    background-color: #ec971f;
+}
+
+.error-message {
+    color: #d9534f;
+    font-weight: bold;
+}
+
+.WordScramble-footer {
+    margin-top: auto; /* Push footer to bottom */
+    padding-top: 20px;
+    font-size: 0.8em;
+    color: #888;
+}

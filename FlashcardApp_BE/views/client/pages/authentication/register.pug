@@ -1,0 +1,112 @@
+extends ../../default/default
+
+block content
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-6
+        .card
+          .card-header
+            h3.text-center Register
+          .card-body
+            // Step 1: Email and OTP Request
+            form#otpRequestForm
+              .mb-3
+                label.form-label(for="email") Email
+                input#email.form-control(type="email", name="email", required)
+              .d-grid
+                button.btn.btn-primary(type="submit") Get OTP Code
+
+            // Step 2: Complete Registration (initially hidden)
+            form#registrationForm(style="display: none;")
+              .mb-3
+                label.form-label(for="regEmail") Email
+                input#regEmail.form-control(type="email", readonly)
+              .mb-3
+                label.form-label(for="password") Password
+                input#password.form-control(type="password", name="password", required)
+              .mb-3
+                label.form-label(for="otp") OTP Code
+                input#otp.form-control(type="text", name="otp", required)
+              .mb-3
+                label.form-label(for="fullName") Full Name
+                input#fullName.form-control(type="text", name="fullName", required)
+              .mb-3
+                label.form-label(for="address") Address
+                input#address.form-control(type="text", name="address", required)
+              .mb-3
+                label.form-label(for="phone") Phone Number
+                input#phone.form-control(type="tel", name="phone", required)
+              .d-grid
+                button.btn.btn-primary(type="submit") Register
+
+block scripts
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      const otpRequestForm = document.getElementById('otpRequestForm');
+      const registrationForm = document.getElementById('registrationForm');
+      const emailInput = document.getElementById('email');
+      const regEmailInput = document.getElementById('regEmail');
+
+      // Handle OTP Request
+      otpRequestForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!validateForm(otpRequestForm)) {
+          showAlert('Please fill in all required fields', 'danger');
+          return;
+        }
+
+        try {
+          const response = await apiRequest('http://localhost:9090/api/v1/auth/register/request-otp', {
+            method: 'POST',
+            body: JSON.stringify({ email: emailInput.value })
+          });
+
+          showAlert('OTP code has been sent to your email', 'success');
+          
+          // Show registration form and hide OTP request form
+          otpRequestForm.style.display = 'none';
+          registrationForm.style.display = 'block';
+          
+          // Set email in registration form
+          regEmailInput.value = emailInput.value;
+        } catch (error) {
+          showAlert(error.message || 'Failed to send OTP code', 'danger');
+        }
+      });
+
+      // Handle Registration
+      registrationForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!validateForm(registrationForm)) {
+          showAlert('Please fill in all required fields', 'danger');
+          return;
+        }
+
+        const formData = {
+          email: regEmailInput.value,
+          password: document.getElementById('password').value,
+          otp: document.getElementById('otp').value,
+          fullName: document.getElementById('fullName').value,
+          address: document.getElementById('address').value,
+          phone: document.getElementById('phone').value
+        };
+
+        try {
+          const response = await apiRequest('http://localhost:9090/api/v1/auth/register/verify', {
+            method: 'POST',
+            body: JSON.stringify(formData)
+          });
+
+          showAlert('Registration successful! Redirecting to login...', 'success');
+          
+          // Redirect to login page after 2 seconds
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 2000);
+        } catch (error) {
+          showAlert(error.message || 'Registration failed', 'danger');
+        }
+      });
+    });

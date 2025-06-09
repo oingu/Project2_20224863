@@ -1,0 +1,62 @@
+extends ../../default/default
+
+block content
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-6
+        .card
+          .card-header
+            h3.text-center Login
+          .card-body
+            form#loginForm(action="/api/v1/auth/login", method="POST")
+              .mb-3
+                label.form-label(for="email") Email
+                input#email.form-control(type="email", name="email", required)
+              .mb-3
+                label.form-label(for="password") Password
+                input#password.form-control(type="password", name="password", required)
+              .d-grid
+                button.btn.btn-primary(type="submit") Login
+
+block scripts
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is already logged in
+      const accessToken = localStorage.getItem('accessToken');
+      if (accessToken) {
+        window.location.href = '/dashboard';
+        return;
+      }
+
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!validateForm(e.target)) {
+          showAlert('Please fill in all required fields', 'danger');
+          return;
+        }
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+          const response = await apiRequest('http://localhost:9090/api/v1/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ email, password })
+          });
+
+          // Store the access token and role
+          localStorage.setItem('accessToken', response.accessToken);
+          localStorage.setItem('userRole', response.role);
+
+          showAlert('Login successful! Redirecting to dashboard...', 'success');
+          
+          // Redirect to dashboard after 1 second
+          setTimeout(() => {
+            window.location.href = '/dashboard';
+          }, 1000);
+        } catch (error) {
+          showAlert(error.message || 'Login failed', 'danger');
+        }
+      });
+    });

@@ -1,0 +1,59 @@
+extends ../../default/default
+
+block content
+  .container.mt-5
+    .row
+      .col-md-12
+        .card
+          .card-header.d-flex.justify-content-between.align-items-center
+            h3.mb-0 Dashboard
+            button#logoutBtn.btn.btn-outline-danger Logout
+          .card-body
+            .row
+              .col-md-4
+                .card.mb-4
+                  .card-body
+                    h5.card-title User Information
+                    p.card-text
+                      strong Role: 
+                      span#userRole
+              .col-md-8
+                .card
+                  .card-body
+                    h5.card-title Welcome to Flashcard App
+                    p.card-text Start creating and managing your flashcards!
+
+block scripts
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is authenticated
+      const accessToken = localStorage.getItem('accessToken');
+      const userRole = localStorage.getItem('userRole');
+
+      if (!accessToken) {
+        window.location.href = '/login';
+        return;
+      }
+
+      // Display user role
+      document.getElementById('userRole').textContent = userRole || 'User';
+
+      // Handle logout
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('userRole');
+        window.location.href = '/login';
+      });
+
+      // Add token to all API requests
+      const originalFetch = window.fetch;
+      window.fetch = function(url, options = {}) {
+        if (url.startsWith('http://localhost:9090')) {
+          options.headers = {
+            ...options.headers,
+            'Authorization': `Bearer ${accessToken}`
+          };
+        }
+        return originalFetch(url, options);
+      };
+    }); 
